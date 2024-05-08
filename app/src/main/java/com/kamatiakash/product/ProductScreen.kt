@@ -24,32 +24,48 @@ import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseTypes
 
 // Sample data class representing a product
 data class ScreenData(
+    var title: String = "",
+    var description: String = "",
+    var screenListData: List<ScreenListData> = emptyList()
+)
+
+data class ScreenListData(
     val firstData: String,
     val secondData: String,
     val thirdData: String
 )
 
 @Composable
-fun ProductScreen(data: VoiceResponseDto,mainViewModel: MainViewModel) {
+fun ProductScreen(data: VoiceResponseDto, mainViewModel: MainViewModel) {
 
-    var screenTitle = ""
-    var dataList: List<ScreenData> = emptyList()
+
+    val screenData = ScreenData()
 
     if (data.type == VoiceResponseTypes.product) {
 
-        screenTitle = "Best deals"
 
-        dataList = data.data.map {
-            ScreenData(it.productName, it.description, it.price)
+        screenData.apply {
+            title = "Best deals"
+            description = "Deals"
+
+            screenListData = data.data.map {
+                ScreenListData(it.productName, it.description, it.price)
+            }
         }
+
 
 
     } else if (data.type == VoiceResponseTypes.order_status) {
-        screenTitle = "Order Status"
 
-        dataList = data.data.map {
-            ScreenData(it.orderNumber, it.status, it.expectedDelivery)
+        screenData.apply {
+            title = "Order Status"
+            description = "Orders"
+
+            screenListData = data.data.map {
+                ScreenListData(it.orderNumber, it.status, it.expectedDelivery)
+            }
         }
+
     }
 
 
@@ -58,7 +74,7 @@ fun ProductScreen(data: VoiceResponseDto,mainViewModel: MainViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(screenTitle) },
+                title = { Text(screenData.title) },
                 backgroundColor = Color.Blue
             )
         }
@@ -69,18 +85,18 @@ fun ProductScreen(data: VoiceResponseDto,mainViewModel: MainViewModel) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Products",
+                text = screenData.description,
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            ProductList(products = dataList)
+            ProductList(products = screenData.screenListData)
         }
     }
 
 }
 
 @Composable
-fun ProductList(products: List<ScreenData>) {
+fun ProductList(products: List<ScreenListData>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -92,7 +108,7 @@ fun ProductList(products: List<ScreenData>) {
 }
 
 @Composable
-fun ProductItem(product: ScreenData) {
+fun ProductItem(product: ScreenListData) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

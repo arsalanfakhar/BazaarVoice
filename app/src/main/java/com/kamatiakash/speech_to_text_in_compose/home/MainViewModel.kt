@@ -51,12 +51,18 @@ class MainViewModel @Inject constructor(
 
             var result = ResultState.Success(
                 data = VoiceResponseDto(
-                    type = VoiceResponseTypes.product,
+                    type = VoiceResponseTypes.order_status,
                     data = listOf(
+//                        VoiceDataDto(
+//                            productName = "Olpers",
+//                            description = "Olpers 1 ltr",
+//                            price = "13,000"
+//                        )
+
                         VoiceDataDto(
-                            productName = "Olpers",
-                            description = "Olpers 1 ltr",
-                            price = "13,000"
+                            orderNumber = "12321",
+                            expectedDelivery = "13 March 2024",
+                            status = "On the way"
                         )
                     )
                 )

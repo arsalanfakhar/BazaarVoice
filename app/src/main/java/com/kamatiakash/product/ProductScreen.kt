@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -121,29 +120,3 @@ fun ProductItem(product: ScreenData) {
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewProductScreen() {
-//    val products = listOf(
-//        Product(
-//            name = "Product 1",
-//            title = "Title 1",
-//            description = "Description 1",
-//            price = 19.99
-//        ),
-//        Product(
-//            name = "Product 2",
-//            title = "Title 2",
-//            description = "Description 2",
-//            price = 29.99
-//        ),
-//        Product(
-//            name = "Product 3",
-//            title = "Title 3",
-//            description = "Description 3",
-//            price = 39.99
-//        )
-//    )
-//    ProductScreen(products = products)
-//}

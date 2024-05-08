@@ -28,8 +28,6 @@ fun AppNavHost(
     startDestination: String = NavigationItem.Home.route,
 ) {
 
-
-
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -57,28 +55,3 @@ fun AppNavHost(
     }
 }
 
-
-@Composable
-fun BackPressHandler(
-    backPressedDispatcher: OnBackPressedDispatcher? =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
-    onBackPressed: () -> Unit
-) {
-    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-
-    val backCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                currentOnBackPressed()
-            }
-        }
-    }
-
-    DisposableEffect(key1 = backPressedDispatcher) {
-        backPressedDispatcher?.addCallback(backCallback)
-
-        onDispose {
-            backCallback.remove()
-        }
-    }
-}

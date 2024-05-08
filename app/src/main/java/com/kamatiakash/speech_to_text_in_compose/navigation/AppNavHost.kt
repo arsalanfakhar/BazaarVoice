@@ -1,7 +1,14 @@
 package com.kamatiakash.speech_to_text_in_compose.navigation
 
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
@@ -11,6 +18,7 @@ import com.kamatiakash.product.ProductScreen
 import com.kamatiakash.speech_to_text_in_compose.home.MainScreen
 import com.kamatiakash.speech_to_text_in_compose.home.MainViewModel
 import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseDto
+import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseTypes
 
 @Composable
 fun AppNavHost(
@@ -19,6 +27,9 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String = NavigationItem.Home.route,
 ) {
+
+
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -33,13 +44,41 @@ fun AppNavHost(
         }
 
         composable(NavigationItem.SEARCH.route) {
-//            val voiceResponseDto =
-//                backStackEntry.arguments?.getParcelable<VoiceResponseDto>("voiceResponseDto")
 
-            ProductScreen(data = mainViewModel.state.voiceResponseDto!!,mainViewModel)
+            ProductScreen(
+                data = mainViewModel.state.voiceResponseDto
+                    ?: VoiceResponseDto(type = VoiceResponseTypes.product, data = emptyList()),
+                mainViewModel
+            )
 
         }
 
 
+    }
+}
+
+
+@Composable
+fun BackPressHandler(
+    backPressedDispatcher: OnBackPressedDispatcher? =
+        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
+    onBackPressed: () -> Unit
+) {
+    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+
+    val backCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                currentOnBackPressed()
+            }
+        }
+    }
+
+    DisposableEffect(key1 = backPressedDispatcher) {
+        backPressedDispatcher?.addCallback(backCallback)
+
+        onDispose {
+            backCallback.remove()
+        }
     }
 }

@@ -31,13 +31,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AppNavHost(navController = rememberNavController(),mainViewModel = mainViewModel)
+                    AppNavHost(
+                        navController = rememberNavController(),
+                        mainViewModel = mainViewModel
+                    )
                 }
             }
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        // Reset ViewModel state if needed
+        mainViewModel.reset()
+        super.onBackPressed()
+    }
+
 }
+
 
 
 

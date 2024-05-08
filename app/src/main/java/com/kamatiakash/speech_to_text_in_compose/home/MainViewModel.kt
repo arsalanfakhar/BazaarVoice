@@ -14,6 +14,7 @@ import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseTypes
 import com.kamatiakash.speech_to_text_in_compose.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -29,12 +30,15 @@ class MainViewModel @Inject constructor(
     fun changeTextValue(text: String) {
         viewModelScope.launch {
             state = state.copy(
-                text = text
+                text = text,
+                isLoading = true
             )
+
+            getApiData(text)
         }
     }
 
-    fun getApiData(inputText: String) {
+    private fun getApiData(inputText: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -43,12 +47,17 @@ class MainViewModel @Inject constructor(
 //                apiService.getData(inputText)
 //            }
 
+            delay(5000)
 
             var result = ResultState.Success(
                 data = VoiceResponseDto(
                     type = VoiceResponseTypes.product,
                     data = listOf(
-                        VoiceDataDto(productId = "11", productName = "12", description = "13")
+                        VoiceDataDto(
+                            productName = "Olpers",
+                            description = "Olpers 1 ltr",
+                            price = "13,000"
+                        )
                     )
                 )
             )
@@ -59,7 +68,8 @@ class MainViewModel @Inject constructor(
                     Log.d("DataResponse", result.data.toString())
 
                     state = state.copy(
-                        voiceResponseDto = result.data
+                        voiceResponseDto = result.data,
+                        isLoading = false
                     )
 
                 }
@@ -67,6 +77,11 @@ class MainViewModel @Inject constructor(
 //                is ResultState.Error -> {
 //
 //                    Log.d("DataResponse", result.data.toString())
+
+//                state = state.copy(
+//                    voiceResponseDto = null,
+//                    isLoading = false
+//                )
 //
 //                }
             }
@@ -77,12 +92,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun reset() {
-        viewModelScope.launch {
-            state = state.copy(
-                text = null,
-                voiceResponseDto = null
-            )
-        }
+        state = state.copy(
+            text = null,
+            voiceResponseDto = null,
+            isLoading = false
+        )
     }
 
 

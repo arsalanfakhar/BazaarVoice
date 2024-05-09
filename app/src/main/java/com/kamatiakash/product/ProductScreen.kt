@@ -15,10 +15,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kamatiakash.speech_to_text_in_compose.home.MainViewModel
-import com.kamatiakash.speech_to_text_in_compose.model.VoiceDataDto
 import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseDto
 import com.kamatiakash.speech_to_text_in_compose.model.VoiceResponseTypes
 
@@ -32,7 +30,8 @@ data class ScreenData(
 data class ScreenListData(
     val firstData: String,
     val secondData: String,
-    val thirdData: String
+    val thirdData: String,
+    val fourthData: String = ""
 )
 
 @Composable
@@ -49,10 +48,13 @@ fun ProductScreen(data: VoiceResponseDto, mainViewModel: MainViewModel) {
             description = "Deals"
 
             screenListData = data.data.map {
-                ScreenListData(it.productName, it.description, it.price)
+                ScreenListData(
+                    it.productName,
+                    it.description,
+                    "Price: ${it.price}"
+                )
             }
         }
-
 
 
     } else if (data.type == VoiceResponseTypes.order_status) {
@@ -62,7 +64,12 @@ fun ProductScreen(data: VoiceResponseDto, mainViewModel: MainViewModel) {
             description = "Orders"
 
             screenListData = data.data.map {
-                ScreenListData(it.orderNumber, it.status, it.expectedDelivery)
+                ScreenListData(
+                    it.orderNumber,
+                    it.orderStatus,
+                    "Order Date: ${it.orderDate}",
+                    "Expected Delivery: ${it.expectedDeliveryDate}"
+                )
             }
         }
 
@@ -130,6 +137,11 @@ fun ProductItem(product: ScreenListData) {
             )
             Text(
                 text = product.thirdData,
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text = product.fourthData,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(bottom = 4.dp)
             )

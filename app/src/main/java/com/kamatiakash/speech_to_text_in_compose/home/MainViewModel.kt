@@ -43,30 +43,30 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
 
-//            var result = safeApiCall {
-//                apiService.getData(inputText)
-//            }
+            val result = safeApiCall {
+                apiService.getData(inputText)
+            }
 
-            delay(5000)
+//            delay(5000)
 
-            var result = ResultState.Success(
-                data = VoiceResponseDto(
-                    type = VoiceResponseTypes.order_status,
-                    data = listOf(
+//            var result = ResultState.Success(
+//                data = VoiceResponseDto(
+//                    type = VoiceResponseTypes.order_status,
+//                    data = listOf(
+////                        VoiceDataDto(
+////                            productName = "Olpers",
+////                            description = "Olpers 1 ltr",
+////                            price = "13,000"
+////                        )
+//
 //                        VoiceDataDto(
-//                            productName = "Olpers",
-//                            description = "Olpers 1 ltr",
-//                            price = "13,000"
+//                            orderNumber = "12321",
+//                            expectedDelivery = "13 March 2024",
+//                            status = "On the way"
 //                        )
-
-                        VoiceDataDto(
-                            orderNumber = "12321",
-                            expectedDelivery = "13 March 2024",
-                            status = "On the way"
-                        )
-                    )
-                )
-            )
+//                    )
+//                )
+//            )
 
             when (result) {
                 is ResultState.Success -> {
@@ -80,16 +80,16 @@ class MainViewModel @Inject constructor(
 
                 }
 
-//                is ResultState.Error -> {
-//
+                is ResultState.Error -> {
+
 //                    Log.d("DataResponse", result.data.toString())
 
-//                state = state.copy(
-//                    voiceResponseDto = null,
-//                    isLoading = false
-//                )
-//
-//                }
+                state = state.copy(
+                    voiceResponseDto = null,
+                    isLoading = false
+                )
+
+                }
             }
 
         }

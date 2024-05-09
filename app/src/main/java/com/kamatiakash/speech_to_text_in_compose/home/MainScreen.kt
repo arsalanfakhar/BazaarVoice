@@ -82,7 +82,7 @@ fun MainScreen(
                 } else
                     permissionState.launchPermissionRequest()
             }) {
-                Text(text = "Speak")
+                Text(text = "Ask AI Assistant")
             }
 
         }

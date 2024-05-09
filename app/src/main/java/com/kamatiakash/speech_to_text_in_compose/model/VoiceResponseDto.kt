@@ -7,7 +7,8 @@ import kotlinx.parcelize.Parcelize
 data class VoiceResponseDto(
     val type: VoiceResponseTypes,
     val data: List<VoiceDataDto>
-):Parcelable
+) : Parcelable
+
 @Parcelize
 data class VoiceDataDto(
     val productId: String = "",
@@ -15,9 +16,10 @@ data class VoiceDataDto(
     val price: String = "",
     val description: String = "",
     val orderNumber: String = "",
-    val status: String = "",
-    val expectedDelivery: String = ""
-):Parcelable
+    val orderStatus: String = "",
+    val orderDate: String = "",
+    val expectedDeliveryDate: String = ""
+) : Parcelable
 
 
 enum class VoiceResponseTypes {
@@ -27,16 +29,3 @@ enum class VoiceResponseTypes {
 
 
 
-data class EmployeeResponse(
-    val status: String,
-    val data: List<Employee>,
-    val message: String
-)
-
-data class Employee(
-    val id: Int,
-    val employee_name: String,
-    val employee_salary: Int,
-    val employee_age: Int,
-    val profile_image: String
-)

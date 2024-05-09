@@ -1,12 +1,15 @@
 package com.kamatiakash.speech_to_text_in_compose.home
 
+import com.kamatiakash.speech_to_text_in_compose.R
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -21,6 +24,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -76,47 +81,64 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(45.dp))
 
-            Button(onClick = {
+            ButtonWithIconAndText("Ask AI Assistant", onClick = {
                 if (permissionState.status.isGranted) {
                     speechRecognizerLauncher.launch(Unit)
                 } else
                     permissionState.launchPermissionRequest()
-            }) {
-                Text(text = "Ask AI Assistant")
-            }
+            })
 
-        }
-
-        // Loader
+            // Loader
 //        CircularLoader(
 //            isVisible = viewModel.state.isLoading,
 //            modifier = loaderModifier
 //        )
 
 
-        InfinityLoader(
-            isVisible = viewModel.state.isLoading,
-            brush = Brush.horizontalGradient(
-                colors = listOf(Color.Red, Color.Blue)
-            ),
-            modifier = Modifier
-                .width(200.dp)
-                .height(150.dp),
-            glow = Glow(),
-            placeholderColor = Color.Black.copy(.16f)
-        )
+            InfinityLoader(
+                isVisible = viewModel.state.isLoading,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color.Red, Color.Blue)
+                ),
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(150.dp),
+                glow = Glow(),
+                placeholderColor = Color.Black.copy(.16f)
+            )
+
+        }
+
+
+        // Observe state changes and navigate to product screen when voiceResponseDto is not null
+        LaunchedEffect(viewModel.state.voiceResponseDto) {
+            viewModel.state.voiceResponseDto?.let {
+                navigateToProduct(it)
+            }
+        }
 
     }
+}
 
-
-    // Observe state changes and navigate to product screen when voiceResponseDto is not null
-    LaunchedEffect(viewModel.state.voiceResponseDto) {
-        viewModel.state.voiceResponseDto?.let {
-            navigateToProduct(it)
+@Composable
+fun ButtonWithIconAndText(
+    buttonText: String,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(id = R.drawable.icn_mic),
+                contentDescription = null, // Decorative icon
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = buttonText)
         }
     }
-
-
 }
 
 @Composable
